@@ -10,4 +10,10 @@ export class Ball {
     this.y = y;
     this.vector = new Vector(angle, magnitude);
   }
+
+  public applyVector(v: Vector) {
+    this.vector.add(v);
+    this.x = this.x + this.vector.x;
+    this.y = this.y + this.vector.y;
+  }
 }
