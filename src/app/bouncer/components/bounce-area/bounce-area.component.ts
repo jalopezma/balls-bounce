@@ -2,6 +2,7 @@ import { Component, Input, ElementRef, AfterViewInit, ViewChild, OnDestroy } fro
 import { Observable, fromEvent } from 'rxjs';
 import { switchMap, takeUntil, pairwise } from 'rxjs/operators';
 import { Ball } from '../../models/ball';
+import { Vector } from '../../models/vector';
 
 @Component({
   selector: 'bb-bounce-area',
@@ -17,8 +18,23 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy {
   private cx: CanvasRenderingContext2D;
   private objects: Array<Ball> = new Array<Ball>();
   private drawInterval;
+  private gravityVector: Vector = new Vector(270, 0.2);
 
-  constructor() {}
+  constructor() {
+    console.log(this.gravityVector);
+    const b = new Ball(50, 200, 90, 0.5);
+    console.log(b);
+    b.applyVector(this.gravityVector);
+    console.log(b);
+    b.applyVector(this.gravityVector);
+    console.log(b);
+    b.applyVector(this.gravityVector);
+    console.log(b);
+    b.applyVector(this.gravityVector);
+    console.log(b);
+    b.applyVector(this.gravityVector);
+    console.log(b);
+  }
 
   public ngAfterViewInit() {
     this.initCanvas();
@@ -45,6 +61,7 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy {
 
   private drawPoints() {
     for (const ball of this.objects) {
+      ball.applyVector(this.gravityVector);
       this.cx.beginPath();
       this.cx.arc(ball.x, ball.y, 10, 0, Math.PI * 2);
       this.cx.fillStyle = '#0095DD';
@@ -56,7 +73,7 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy {
   public onClick($event) {
     console.log('click!!!', $event);
     const randAngle = this.getRandom(15, 165);
-    const randMagnitude = this.getRandom(0.5, 2);
+    const randMagnitude = this.getRandom(0.3, 0.4);
     const ball = new Ball($event.clientX, $event.clientY, randAngle, randMagnitude);
     console.log(ball, randAngle, randMagnitude);
     this.objects.push(ball);
