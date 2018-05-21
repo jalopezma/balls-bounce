@@ -1,15 +1,20 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { BouncerRoutingModule } from './bouncer-routing.module';
 import { BounceAreaComponent } from './components/bounce-area/bounce-area.component';
+import { BouncePageComponent } from './container/bounce-page/bounce-page.component';
+
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
-    CommonModule,
-    BouncerRoutingModule
+    SharedModule,
+    BouncerRoutingModule,
   ],
-  declarations: [BounceAreaComponent],
-  exports: [BounceAreaComponent]
+  declarations: [
+    BounceAreaComponent,
+    BouncePageComponent
+  ],
+  exports: [BouncePageComponent]
 })
 export class BouncerModule { }
