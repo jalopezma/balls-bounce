@@ -19,11 +19,11 @@ export class Vector {
   }
 
   /**
-   * Adds vector `v2` to own vector and calculate magnitude and angle
+   * Adds vector `v` to own vector and calculate magnitude and angle
    */
-  public add(v2: Vector) {
-    this.x = this.x + v2.x;
-    this.y = this.y + v2.y;
+  public add(v: Vector) {
+    this.x = this.x + v.x;
+    this.y = this.y + v.y;
 
     this.magnitude = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
     this.angle = this.radiansToDegrees(parseFloat(Math.atan(this.x / this.y).toFixed(10)));
