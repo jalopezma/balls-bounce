@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, Input, ElementRef, AfterViewInit, ViewChild, OnDestroy, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { Observable, fromEvent } from 'rxjs';
 import { switchMap, takeUntil, pairwise } from 'rxjs/operators';
 import { Ball } from '../../models/ball';
@@ -9,31 +9,28 @@ import { Vector } from '../../models/vector';
   templateUrl: './bounce-area.component.html',
   styleUrls: ['./bounce-area.component.scss']
 })
-export class BounceAreaComponent implements AfterViewInit, OnDestroy {
+export class BounceAreaComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input() public width = 400;
   @Input() public height = 400;
+  @Input() onReset: EventEmitter<any>;
 
   @ViewChild('canvas') public canvas: ElementRef;
 
   private cx: CanvasRenderingContext2D;
   private objects: Array<Ball> = new Array<Ball>();
   private drawInterval;
-  private gravityVector: Vector = new Vector(270, 0.2);
+  private isRunning = false;
+  // As the canvas 0 y point it's at the top, the gravity vector has to point to the top
+  private gravityVector: Vector = new Vector(90, 0.04);
 
-  constructor() {
-    console.log(this.gravityVector);
-    const b = new Ball(50, 200, 90, 0.5);
-    console.log(b);
-    b.applyVector(this.gravityVector);
-    console.log(b);
-    b.applyVector(this.gravityVector);
-    console.log(b);
-    b.applyVector(this.gravityVector);
-    console.log(b);
-    b.applyVector(this.gravityVector);
-    console.log(b);
-    b.applyVector(this.gravityVector);
-    console.log(b);
+  constructor() { }
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if ('onReset' in changes && changes.onReset.currentValue) {
+      this.onReset.subscribe(() => {
+        this.reset();
+      });
+    }
   }
 
   public ngAfterViewInit() {
@@ -41,7 +38,7 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    clearInterval(this.drawInterval);
+    this.reset();
   }
 
   private initCanvas() {
@@ -49,14 +46,31 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy {
     this.cx = canvasEl.getContext('2d');
     canvasEl.width = this.width;
     canvasEl.height = this.height;
+    this.startDrawInterval();
+  }
+
+  private startDrawInterval() {
     this.drawInterval = setInterval(() => {
       this.updateCanvas();
     }, 10);
+    this.isRunning = true;
+  }
+
+  private stopDrawInterval() {
+    clearInterval(this.drawInterval);
+    this.isRunning = false;
   }
 
   private updateCanvas() {
     if (!this.cx) { return; }
+    this.cleanCanvas();
     this.drawPoints();
+  }
+
+  private cleanCanvas() {
+    if (this.cx) {
+      this.cx.clearRect(0, 0, this.width, this.height);
+    }
   }
 
   private drawPoints() {
@@ -71,15 +85,24 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy {
   }
 
   public onClick($event) {
-    console.log('click!!!', $event);
-    const randAngle = this.getRandom(15, 165);
-    const randMagnitude = this.getRandom(0.3, 0.4);
+    // As the canvas y 0 point it's at the top, we launch the balls with an "opposite" direction
+    const randAngle = this.getRandom(230, 300);
+    const randMagnitude = this.getRandom(1, 4);
     const ball = new Ball($event.clientX, $event.clientY, randAngle, randMagnitude);
-    console.log(ball, randAngle, randMagnitude);
     this.objects.push(ball);
+
+    if (!this.isRunning) {
+      this.startDrawInterval();
+    }
   }
 
   private getRandom(min, max: number): number {
     return Math.random() * (max - min) + min;
+  }
+
+  public reset() {
+    this.stopDrawInterval();
+    this.objects.length = 0;
+    this.cleanCanvas();
   }
 }
