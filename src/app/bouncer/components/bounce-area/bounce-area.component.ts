@@ -12,7 +12,7 @@ import { Vector } from '../../models/vector';
 export class BounceAreaComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input() public width = 400;
   @Input() public height = 400;
-  @Input() onReset: EventEmitter<any>;
+  @Input() resetEmitter: EventEmitter<any>;
 
   @ViewChild('canvas') public canvas: ElementRef;
 
@@ -26,8 +26,8 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy, OnChanges 
   constructor() { }
 
   public ngOnChanges(changes: SimpleChanges) {
-    if ('onReset' in changes && changes.onReset.currentValue) {
-      this.onReset.subscribe(() => {
+    if ('resetEmitter' in changes && changes.resetEmitter.currentValue) {
+      this.resetEmitter.subscribe(() => {
         this.reset();
       });
     }
