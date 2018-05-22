@@ -2,7 +2,7 @@ export class Vector {
   public x: number;
   public y: number;
   public magnitude: number;
-  public angle: number;
+  public angle: number; // on degrees
   public rad: number;
 
   constructor(angle, magnitude: number) {
@@ -68,9 +68,18 @@ export class Vector {
     this.toPolarCoordinates();
   }
 
-  public invertY() {
-    console.log(this.y, this.y * 0.8, -(this.y * 0.8));
-    this.y = -(this.y * 0.8);
+  public invertY(ratio: number = 0.8) {
+    this.y = -this.y;
+    this.toPolarCoordinates();
+  }
+
+  public reduceX(ratio: number = 0.8) {
+    this.x = this.x * ratio;
+    this.toPolarCoordinates();
+  }
+
+  public reduceY(ratio: number = 0.8) {
+    this.y = this.y * ratio;
     this.toPolarCoordinates();
   }
 }
