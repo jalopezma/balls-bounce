@@ -64,8 +64,8 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy, OnChanges 
   private updateCanvas() {
     if (!this.cx) { return; }
     this.cleanCanvas();
-    this.detectLimits();
-    this.drawPoints();
+    this.updateBalls();
+    this.drawBalls();
   }
 
   private cleanCanvas() {
@@ -74,21 +74,18 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy, OnChanges 
     }
   }
 
-  private detectCollisions() {
-  }
-
-  private detectLimits() {
+  private updateBalls() {
     for (const ball of this.objects) {
-      ball.checkCanvasLimits(this.width, this.height);
-      ball.applyVector(this.gravityVector);
+      ball.applyVector(this.gravityVector, this.width, this.height);
     }
   }
 
-  private drawPoints() {
+  private drawBalls() {
     for (const ball of this.objects) {
       this.cx.beginPath();
       this.cx.arc(ball.x, ball.y, Ball.Radio, 0, Math.PI * 2);
       this.cx.fillStyle = '#0095DD';
+      this.cx.stroke();
       this.cx.fill();
       this.cx.closePath();
     }
