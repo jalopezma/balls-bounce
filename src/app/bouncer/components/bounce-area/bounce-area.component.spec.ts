@@ -22,4 +22,11 @@ describe('BounceAreaComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  fit('should render canvas', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    component.ngAfterViewInit();
+    fixture.detectChanges();
+    expect(compiled.querySelector('canvas')).toBeDefined();
+  });
 });
