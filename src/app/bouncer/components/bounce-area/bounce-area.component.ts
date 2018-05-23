@@ -17,6 +17,7 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy, OnChanges 
   @ViewChild('canvas') public canvas: ElementRef;
 
   private cx: CanvasRenderingContext2D;
+  private canvasEl: HTMLCanvasElement;
   private objects: Array<Ball> = new Array<Ball>();
   private drawInterval;
   private isRunning = false;
@@ -31,6 +32,12 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy, OnChanges 
         this.reset();
       });
     }
+    if (('width' in changes && changes.width.currentValue || 'height' in changes && changes.height.currentValue)) {
+      if (this.cx) {
+        this.canvasEl.width = this.width;
+        this.canvasEl.height = this.height;
+      }
+    }
   }
 
   public ngAfterViewInit() {
@@ -42,10 +49,10 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy, OnChanges 
   }
 
   private initCanvas() {
-    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
-    this.cx = canvasEl.getContext('2d');
-    canvasEl.width = this.width;
-    canvasEl.height = this.height;
+    this.canvasEl = this.canvas.nativeElement;
+    this.cx = this.canvasEl.getContext('2d');
+    this.canvasEl.width = this.width;
+    this.canvasEl.height = this.height;
     this.startDrawInterval();
   }
 
