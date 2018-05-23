@@ -29,38 +29,54 @@ export class Ball {
    * Checks if the ball hits with the limit. If so, we check if we already inverted the vector
    */
   public checkCanvasLimitsWidth(width: number) {
-    if ((this.x >= (width - Ball.Radio) && this.vector.x > 0) || (this.x <= Ball.Radio && this.vector.x < 0)) {
+    if ((this.isOutRightLimit(width) && this.vector.x > 0) || (this.isOutLeftLimit() && this.vector.x < 0)) {
       this.vector.invertX();
       this.vector.reduceX();
     }
     // If ball goes out of boundaries, set to min or max
-    if (this.x < Ball.Radio) {
+    if (this.isOutLeftLimit()) {
       this.x = Ball.Radio;
-    } else if (this.x > (width - Ball.Radio)) {
+    } else if (this.isOutRightLimit(width)) {
       this.x = width - Ball.Radio;
     }
+  }
+
+  public isOutLeftLimit(): boolean {
+    return this.x <= Ball.Radio;
+  }
+
+  public isOutRightLimit(width: number): boolean {
+    return this.x >= (width - Ball.Radio);
   }
 
   /**
    * Checks if the ball hits with the limit. If so, we check if we already inverted the vector
    */
   public checkCanvasLimitsHeight(height: number) {
-    if (this.y >= height - Ball.Radio && this.vector.y > 0) {
+    if (this.isOutBottomLimit(height) && this.vector.y > 0) {
       this.vector.reduceX();
     }
-    if ((this.y >= height - Ball.Radio && this.vector.y > 0) || (this.y <= Ball.Radio && this.vector.y < 0)) {
+    if ((this.isOutBottomLimit(height) && this.vector.y > 0) || (this.isOutTopLimit() && this.vector.y < 0)) {
       this.vector.invertY();
       this.vector.reduceY();
     }
     // If ball goes out of boundaries, set to min or max
-    if (this.y < Ball.Radio) {
+    if (this.isOutTopLimit()) {
       this.y = Ball.Radio;
-    } else if (this.y > (height - Ball.Radio)) {
+    } else if (this.isOutBottomLimit(height)) {
       this.y = height - Ball.Radio;
     }
   }
 
-  public isBouncing(height): boolean {
+  public isOutTopLimit(): boolean {
+    return this.y <= Ball.Radio;
+  }
+
+  public isOutBottomLimit(height: number): boolean {
+    return this.y >= height - Ball.Radio;
+  }
+
+  public isBouncing(height: number): boolean {
     return (
       (this.y === height - Ball.Radio) &&
       (this.vector.magnitude < 0.05)
