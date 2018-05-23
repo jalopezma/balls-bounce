@@ -1,2 +1,4 @@
-<bb-bounce-area [resetEmitter]="resetEmitter"></bb-bounce-area>
-<button mat-raised-button color="primary" (click)="onReset()">reset</button>
+<div class="bounce-page-container" fxLayout="column" fxLayoutAlign="center center">
+  <bb-bounce-area [resetEmitter]="resetEmitter" [width]="canvasSize[0]" [height]="canvasSize[1]"></bb-bounce-area>
+  <button mat-raised-button color="primary" (click)="onReset()">reset</button>
+</div>
