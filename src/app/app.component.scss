@@ -1,0 +1,27 @@
+.toolbar-wrapper {
+  margin: 0 auto;
+}
+.main-container {
+  font: 500 20px/32px Roboto,"Helvetica Neue",sans-serif;
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+
+  .readme {
+    border-radius: 4px;
+    background-color: #e6e6e6;
+    color: #504646;
+    padding: 16px;
+    text-align: justify;
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 26px;
+    p {
+      margin: 10px 0 0;
+    }
+    a {
+      color: #4885fd;
+      text-decoration: none;
+    }
+  }
+}
