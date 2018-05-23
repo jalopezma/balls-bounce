@@ -95,7 +95,7 @@ export class BounceAreaComponent implements AfterViewInit, OnDestroy, OnChanges 
     // As the canvas y 0 point it's at the top, we launch the balls with an "opposite" direction
     const randAngle = this.getRandom(230, 300);
     const randMagnitude = this.getRandom(1, 4);
-    const ball = new Ball($event.clientX, $event.clientY, randAngle, randMagnitude);
+    const ball = new Ball($event.layerX, $event.layerY, randAngle, randMagnitude);
     this.objects.push(ball);
 
     if (!this.isRunning) {
